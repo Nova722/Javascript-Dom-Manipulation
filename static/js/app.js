@@ -1,8 +1,10 @@
+
 // from data.js
 var tableData = data;
 
 // select tbody 
 tbody = d3.select("tbody")
+console.log("hello")
 
 // loop through table using pbject entries
 function displayData(something){ 
@@ -16,85 +18,50 @@ function displayData(something){
 
 displayData(tableData)
 
-//user input and filter button
-var dateInput = d3.select("#datetime")
-var button = d3.select("#filter-btn").on("click", clickSelect)
+console.log("hello2")
 
 
-// filter data with date that the user inputs
-function clickSelect(){
-    //no page refresh
-    d3.event.preventDefault();
-    console.log(dateInput.property("value"));
-    //create a new table with filter
-    var filter_table = tableData.filter(et_sighting => et_sighting.datetime===dateInput.property("value"))
-    //display new table
-    displayData(filter_table);
-}
+// Select the submit button
+var submit = d3.select("#submit");
 
-//user input and filter button
-var cityInput = d3.select("#city")
-var button2 = d3.select("#filter-btn2").on("click", clickSelectcity)
+submit.on("click", function() {
+    console.log("hello3")
 
-// filter data with date that the user inputs
-function clickSelectcity(){
-    //no page refresh
-    d3.event.preventDefault();
-    console.log(cityInput.property("value"));
-    //create a new table with filter
-    var filter_table = tableData.filter(et_sighting => et_sighting.city===cityInput.property("value"))
-    //display the table
-    displayData(filter_table);
-}
+  // Prevent the page from refreshing
+  d3.event.preventDefault();
 
+  // Select the input element and get the raw HTML node
+  var dateInput = d3.select("#datetime");
+  var cityInput = d3.select("#city");
+  var stateInput = d3.select("#state");
+  var countryInput = d3.select("#country");
+  var shapeInput = d3.select("#shape");
 
-//user input and filter button
-var stateInput = d3.select("#state")
-var button3 = d3.select("#filter-btn3").on("click", clickSelectstate)
+  // Get the value property of the input element
+  console.log(dateInput.property("value"));
+  console.log(cityInput.property("value"));
+  console.log(stateInput.property("value"));
+  console.log(countryInput.property("value"));
+  console.log(shapeInput.property("value"));
 
-// filter data with date that the user inputs
-function clickSelectstate(){
-    //no page refresh
-    d3.event.preventDefault();
-    console.log(stateInput.property("value"));
-    //create a new table with filter
-    var filter_table = tableData.filter(et_sighting => et_sighting.state===stateInput.property("value"))
-    //display the table
-    displayData(filter_table);
+  //create a variable which filters the table if a user enters only some information in so that it will still work
 
-}
+ var filtered = tableData.filter(et_sighting =>{
+  return (et_sighting.datetime===dateInput.property("value") || !dateInput.property("value") ) && 
+            (et_sighting.city===cityInput.property("value") || !cityInput.property("value")) &&
+            (et_sighting.state===stateInput.property("value") || !stateInput.property("value")) &&
+            (et_sighting.country===countryInput.property("value") || !countryInput.property("value")) &&
+            (et_sighting.shape===shapeInput.property("value") || !shapeInput.property("value"))
+ })
 
-//user input and filter button
-var countryInput = d3.select("#country")
-var button4 = d3.select("#filter-btn4").on("click", clickSelectcountry)
-
-// filter data with date that the user inputs
-function clickSelectcountry(){
-    //no page refresh
-    d3.event.preventDefault();
-    console.log(countryInput.property("value"));
-    //create a new table with filter
-    var filter_table = tableData.filter(et_sighting => et_sighting.country===countryInput.property("value"))
-    //display the table
-    displayData(filter_table);
-}
+ //run the filtered entries through the displayData function to update the table
+ displayData(filtered);
 
 
-//user input and filter button
-var shapeInput = d3.select("#shape")
-//var shapeInput = shapeInput2.toLowerCase()
-var button5 = d3.select("#filter-btn5").on("click", clickSelectshape)
+});
 
-// filter data with date that the user inputs
-function clickSelectshape(){
-    //no page refresh
-    d3.event.preventDefault();
-    console.log(shapeInput.property("value"));
-    //create a new table with filter
-    var filter_table = tableData.filter(et_sighting => et_sighting.shape===shapeInput.property("value"))
-    //display the table
-    displayData(filter_table);
-}
+
+
 
 
 
