@@ -60,6 +60,30 @@ submit.on("click", function() {
 
 });
 
+var filterInputs = d3.selectAll('.form-control');
+
+// Clears input fields and input object
+function clearEntries() {
+    filters = {};
+
+    // Sets every input field to empty
+    filterInputs._groups[0].forEach(entry => {
+        if (entry.value != 0) {
+            d3.select('#' + entry.id).node().value = "";
+        }
+    });
+};
+
+var clearButton = d3.select("#clear");
+// Clear button on click clears fields
+clearButton.on('click', function () {
+
+    // Keeps page from refreshing completely, only want the table to refresh
+    d3.event.preventDefault();
+    // Clears input fields
+    clearEntries()
+});
+
 
 
 
