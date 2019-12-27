@@ -1,89 +1,82 @@
-
-// from data.js
-var tableData = data;
-
-// select tbody 
-tbody = d3.select("tbody")
-console.log("hello")
-
-// loop through table using pbject entries
-function displayData(something){ 
-    tbody.text("")
-    something.forEach(function(et_sighting){
-    new_tr = tbody.append("tr")
-    Object.entries(et_sighting).forEach(function([key, value]){
-        new_td = new_tr.append("td").text(value)	
-    })
-})}
-
-displayData(tableData)
-
-console.log("hello2")
-
-
-// Select the submit button
-var submit = d3.select("#submit");
-
-submit.on("click", function() {
-    console.log("hello3")
-
-  // Prevent the page from refreshing
-  d3.event.preventDefault();
-
-  // Select the input element and get the raw HTML node
-  var dateInput = d3.select("#datetime");
-  var cityInput = d3.select("#city");
-  var stateInput = d3.select("#state");
-  var countryInput = d3.select("#country");
-  var shapeInput = d3.select("#shape");
-
-  // Get the value property of the input element
-  console.log(dateInput.property("value"));
-  console.log(cityInput.property("value"));
-  console.log(stateInput.property("value"));
-  console.log(countryInput.property("value"));
-  console.log(shapeInput.property("value"));
-
-  //create a variable which filters the table if a user enters only some information in so that it will still work
-
- var filtered = tableData.filter(et_sighting =>{
-  return (et_sighting.datetime===dateInput.property("value") || !dateInput.property("value") ) && 
-            (et_sighting.city===cityInput.property("value") || !cityInput.property("value")) &&
-            (et_sighting.state===stateInput.property("value") || !stateInput.property("value")) &&
-            (et_sighting.country===countryInput.property("value") || !countryInput.property("value")) &&
-            (et_sighting.shape===shapeInput.property("value") || !shapeInput.property("value"))
- })
-
- //run the filtered entries through the displayData function to update the table
- displayData(filtered);
-
-
-});
-
-var filterInputs = d3.selectAll('.form-control');
-
-// Clears input fields and input object
-function clearEntries() {
-    filters = {};
-
-    // Sets every input field to empty
-    filterInputs._groups[0].forEach(entry => {
-        if (entry.value != 0) {
-            d3.select('#' + entry.id).node().value = "";
-        }
-    });
-};
-
-var clearButton = d3.select("#clear");
-// Clear button on click clears fields
-clearButton.on('click', function () {
-
-    // Keeps page from refreshing completely, only want the table to refresh
-    d3.event.preventDefault();
-    // Clears input fields
-    clearEntries()
-});
-
+//var start_time = performance.now();
+var cusDiv = document.createElement('div');
+cusDiv.className = "container";
+var fragment = document.createDocumentFragment();
+var table = document.createElement('table');
+table.className = "table table-bordered";
+var row = document.createElement('tr');
+var arr = ["Date","City","State","Country","Shape","Duration","Comments"];
+for(var i=0;i<arr.length;i++){
+	var column = document.createElement('td');
+	column.textContent = arr[i];
+	row.appendChild(column);
+}
+table.appendChild(row);
+var table_data = data;
+function bodyAttachment(){
+	cusDiv.appendChild(table);
+	fragment.appendChild(cusDiv);
+	document.body.appendChild(fragment);
+}
+function dataAttachment(i){
+	var data_row = document.createElement('tr');
+	for(var j = 0;j<7;j++){
+		var data_col = document.createElement('td');
+		switch(j){
+			case 0: data_col.textContent = table_data[i].datetime;
+					break;
+			case 1: data_col.textContent = table_data[i].city;
+					break;
+			case 2: data_col.textContent = table_data[i].state;
+					break;
+			case 3: data_col.textContent = table_data[i].country;
+					break;
+			case 4: data_col.textContent = table_data[i].shape;
+					break;
+			case 5: data_col.textContent = table_data[i].durationMinutes;
+					break;
+			case 6: data_col.textContent = table_data[i].comments;
+					break;
+		}
+		data_row.appendChild(data_col);
+	}
+	table.appendChild(data_row);
+}
+for(var i = 0;i<table_data.length;i++){
+     		dataAttachment(i);
+}
+bodyAttachment();
+var btn      = document.getElementById('filter');
+var date     = document.getElementById('date');
+var city     = document.getElementById('city');
+var state    = document.getElementById('state');
+var country  = document.getElementById('country');
+var shape    = document.getElementById('shape');
+var time     = document.getElementById('time');
+var comments = document.getElementById('comments');
+var msg      = document.getElementById('msg');
+btn.addEventListener('click',filterData,false);
+function filterData(){
+	 if(date.value == "" && city.value == "" && state.value 
+		   == "" && country.value == ""&&
+		   shape.value ==  "" && time.value == ""
+		   &&comments.value == ""){
+	 		msg.innerHTML = "Please enter one of the fields!!!!";
+	 }else{
+	 table.textContent = "";
+	 for(var i = 0;i<table_data.length;i++){
+		 if(date.value == table_data[i].datetime || city.value == table_data[i].city || state.value 
+		   == table_data[i].state || country.value == table_data[i].country||
+		   shape.value ==  table_data[i].shape || time.value == table_data[i].durationMinutes 
+		   ||comments.value == table_data[i].comments){
+		   	dataAttachment(i);
+		 } 
+	}
+	bodyAttachment();
+}
+}
+ // var end_time = performance.now();
+ //  console.log(end_time - start_time);
 
 
 
